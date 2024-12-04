@@ -1,0 +1,84 @@
+.home{
+	  padding: 2rem ;
+	  display: flex;
+	  flex-direction: column;
+	  width: 100%;
+	  height: calc(100vh - 4rem);
+
+	 >section{
+		width: 90%;
+		height: 18.75rem;
+		margin: auto ;
+		background: url('../assets/images/cover.jpg') no-repeat center/ cover ;
+	 }
+
+	 >h1{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 3rem;
+	
+	 }
+
+
+	 >main{
+		// background-color: red;
+		display: flex;
+		gap: 1rem;
+		width: 100%;
+		flex: 1;
+		overflow-x: auto;
+
+		&::-webkit-scrollbar{
+			display: none;
+		}
+
+	 }
+
+	 >div{
+
+	 }
+
+
+}
+
+.productcard{
+	width: 18.75rem;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+
+	img{
+		width: 15rem;
+		// margin: 0.5rem;
+		object-fit: cover;
+	}
+	
+	>div{
+		
+		
+		    display:flex;
+		   justify-content: center;
+		   gap: 2rem;
+		  
+		button{
+			
+			//  border: none;
+			//   display: flex;
+			//   gap: 2rem;
+			
+			//  flex-direction: row;
+			// background-color: aqua;
+			// transition: all 0.3s;
+			// padding: 5px;
+			// border-radius: 5px;
+			// cursor: pointer;
+		}
+
+	}
+
+
+}

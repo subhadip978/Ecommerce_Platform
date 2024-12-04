@@ -1,0 +1,38 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+  }
+
+.header{
+	  display: flex;
+	  flex-direction: row;
+	 justify-content: flex-end;
+	 align-items: center;
+	  gap: 1.2rem;
+	
+
+
+
+	a{
+		// color: aqua;
+		font-size: 1.2rem;
+		text-decoration: none;
+	
+	}
+	button{
+
+
+	}
+
+	dialog{
+		border: 2px solid #ccc;
+		border-radius: 5px;
+    	padding: 10px;
+    	width: 100px;
+    	position: absolute;
+		left: calc(100% - 100px);
+		top: 8%;
+
+	}
+}
