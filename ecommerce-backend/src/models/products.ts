@@ -1,39 +1,41 @@
 import mongoose,{Schema} from 'mongoose'
 
-interface iphoto{
-	public_id:string;
-	url:string;
+// interface iphoto{
+// 	public_id:string;
+// 	url:string;
 
-}
+// }
 
-interface productI extends Document{
-	name:string;
-	photos:string;
-	price:number;
-	stock:number;
-	category:string;
-	description:string;
-	ratings:number;
-	numofreviews:Number;
-	createdAt:Date;
-	updatedAt:Date;
+// interface productI extends Document{
+// 	name:string;
+// 	photos:{string};
+// 	price:number;
+// 	stock:number;
+// 	category:string;
+// 	description:string;
+// 	ratings:number;
+// 	numofreviews:Number;
+// 	createdAt:Date;
+// 	updatedAt:Date;
 
-}
+// }
 
-const schema:Schema<productI>= new Schema({
-
-
+const schema= new Schema({
 
 	name:{
 		type:String,
 		required:[true,"please enter name"],
 	},
-	photos:{
-
-		
-			type:String,
-			required:[true,"please enter public photot"],
-		},
+	photos: {
+        public_id: {
+          type: String,
+          required: [true, "Please enter Public ID"],
+        },
+        url: {
+          type: String,
+          required: [true, "Please enter URL"],
+        },
+      },
 		
 	price:{
 		type:Number,

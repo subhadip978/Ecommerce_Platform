@@ -9,8 +9,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const signUp = TryCatch(async (req: Request<{}, {}, NewUserRequestBody>, res: Response, next: NextFunction): Promise<void> => {
-  const { name, email, gender, role, _id,password } = req.body;
-
+  const { name, email, gender,  _id,password } = req.body;
+console.log(name,email,gender);
   if ( !name || !email || !gender)
     throw new ErrorHandler("Please add all fields", 400);
 
@@ -21,15 +21,15 @@ export const signUp = TryCatch(async (req: Request<{}, {}, NewUserRequestBody>, 
     throw new ErrorHandler("User with email or username already exists", 409)
   }
    const salt=await bcrypt.genSalt(5);
-  const hashedPass= bcrypt.hashSync(password,salt );
+  const hashedPassword= bcrypt.hashSync(password,salt );
   const user = await User.create({
     name,
     email,
 
     gender,
-    role,
+    // role,
   
-    password
+    password:hashedPassword
   });
 
    res.status(201).json({ success: true, user });
@@ -42,6 +42,7 @@ export const signUp = TryCatch(async (req: Request<{}, {}, NewUserRequestBody>, 
 export const signin = TryCatch(async (req: Request, res: Response, next: NextFunction):Promise<void> => {
 
   const { email, name, password } = req.body;
+  console.log(name,email);
   if (!name && !email) {
     throw new ErrorHandler("username or email is required", 400);
   }
@@ -52,8 +53,13 @@ export const signin = TryCatch(async (req: Request, res: Response, next: NextFun
   if (!user) {
     throw new ErrorHandler("User does not exist", 404)
   }
+  
 
   const matchPassword = await bcrypt.compare(password, user.password);
+
+  if(!matchPassword){
+    throw new ErrorHandler("password is not correct",401)
+  }
   const options = {
     httpOnly: true,
   }
@@ -62,18 +68,18 @@ export const signin = TryCatch(async (req: Request, res: Response, next: NextFun
   }
 
   const accessToken = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-console.log("accesstoken");
-  if (user && matchPassword) {
+
+ 
     res
       .status(200)
       .cookie("accessToken", accessToken, options)
-      .json({
-        name: user.name,
-        email: user.email,
+      .json({sucess:true,
+        user
 
       });
-
-  }
+      
+    
+   
 })
 
 

@@ -4,12 +4,18 @@ import userRoute from "./routes/user.js"
 import productRouter from './routes/product.js'
 import { errorMiddleware } from './middlewares/error.js';
 import { connectDB } from './utils/feature.js';
+import cors from 'cors';
 
 const app= express();
 const port =3000;
 app.use(express.json())
 
 dotenv.config();
+
+app.use(cors({
+	origin: 'http://localhost:5173/', // Replace with your frontend URL
+	credentials: true,
+  }));
 
 connectDB()
 app.get("/product",(req,res)=>{

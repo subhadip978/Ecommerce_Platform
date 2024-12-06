@@ -6,12 +6,11 @@ import { Product } from "../models/products.js";
 import { rm } from "fs";
 import { BaseQuery } from "../types/type.js";
 import { NewProductRequestBody ,SearchRequestQuery} from "../types/type.js";
-import { uploadToCloudinary } from '../utils/feature.js';
+import { deleteFromCloudinary, uploadToCloudinary } from '../utils/feature.js';
 
 
 
 export const newProduct=TryCatch(async(req: Request<{}, {}, NewProductRequestBody>,res,next):Promise<void>=>{
-
 
 		const {name,price,stock,category}=req.body;
 		const photo=req.file ;
@@ -26,13 +25,13 @@ export const newProduct=TryCatch(async(req: Request<{}, {}, NewProductRequestBod
 			throw new ErrorHandler("please enter all field",400);
 		}
 
-			const photoUrl= await uploadToCloudinary(photo);
+		const photoUrl= await uploadToCloudinary(photo);
 		const product=await Product.create({
-			name,			
+			   name,			
 				price,
 				stock,
 				category:category.toLowerCase(),
-				photo:photo?.path,
+				photo:photoUrl,
 	
 
 		})
@@ -94,40 +93,35 @@ export const getSingleProduct=TryCatch(async(req,res,next)=>{
 
 export const updateProduct =TryCatch(
 	async(req,res,next)=>{
-	const {id}=req.params ;
 
+	const {id}=req.params ;
 	const {name,price,stock,category}=req.body;
 	const photo=req.file ;
+
 	const product= await Product.findById(id);
 	if(!product){
 		throw new ErrorHandler("invalid product id",400);
 	}
 	if(photo){
-		rm(product.photos!,()=>{
-			console.log("old photot deleted");
-		})
-		product.photos=photo.path ;
-	}
-	if(!photo){
-		throw new ErrorHandler("please add photo",400);
-	}
-	if(!name || !price ||!stock ||!category){
-		rm(photo.path,()=>{
-			console.log("Deleted")
-		})
-		throw new ErrorHandler("please enter all field",400);
-	}
+		const photosURL = await uploadToCloudinary(photo);
 
-	await Product.create({
+		 if (product.photos?.public_id) {
+        await deleteFromCloudinary(product.photos.public_id);
+      }
+	}
+	
+	
+
+	const updatedProduct=await Product.findByIdAndUpdate({
 		
 			price,
 			stock,
 			category:category.toLowerCase(),
-			photo:photo?.path,
+			photo:photo,
 
 
 	})
-	res.json({})
+	res.status(201).json({success:true,updatedProduct});
 
 })
 

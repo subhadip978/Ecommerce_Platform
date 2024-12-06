@@ -14,6 +14,8 @@ import ProductManagement from './pages/admin/ProductManagement'
 import Dashboard from './pages/admin/Dashboard'
 import NewProduct from './pages/admin/NewProduct'
 import UpdateProduct from './pages/admin/UpdateProduct'
+import SignupPage from './pages/SignupPage'
+import { Toaster } from 'react-hot-toast'
 
 
 
@@ -47,6 +49,7 @@ const App = () => {
 
    <Router>
     {/* <Header/> */}
+      <Toaster/>
     <Routes>
       <Route path="/" element={<Layout/>}>
       <Route index element={<HomePage/>} />
@@ -56,6 +59,7 @@ const App = () => {
 
 </Route>
       {/* Nt logged in route */}
+      <Route path="/signup"  element={<SignupPage/>}/>
       <Route path="/login"  element={<Login/>}/>
       <Route path="/shipping" element={<Shipping/>}/>
 

@@ -1,50 +1,99 @@
 import React,{useState} from 'react'
-import { FcGoogle } from 'react-icons/fc';
+
 
 import '../styles/login.scss'
+import { useLoginMutation } from '../redux/api/userApi';
+import { useDispatch } from 'react-redux';
+import { userExist } from '../redux/reducer/userRedux';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 
 const Login = () => {
+	const navigate=useNavigate()
 
-	const [gender,setGender]=useState();
+	const dispatch = useDispatch();
+	const [login]=useLoginMutation();
 
-	const handleChange=()=>{
-		try{
+	const [inputs,setInputs]=useState({
+		name:"",
+		email:"",
+		
+		password:""
 
-		}catch(err){
-			console.log(err);
-		}
+	})
+
+	const changeHandler=(e:React.ChangeEvent<HTMLInputElement>)=>{
+		setInputs((prevState)=>({...prevState,[e.target.name]:e.target.value}))
+
 	}
+
+
+	const handleSubmit=async(e: React.FormEvent<HTMLFormElement>)=>{
+		e.preventDefault();
+		console.log(inputs);
+		const {data}=await login(inputs);
+		console.log(data);
+		toast.success("Successfully logged in ")
+		if(data?.user){
+
+
+			dispatch(userExist(data?.user));
+			navigate("/")
+		}
+
+	}
+
+
 	
 
   return (
-	<div className="login">
+	<div className="h-[calc(100vh-80px)] px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center justify-center">
+	<form  onSubmit={handleSubmit} className="flex flex-col gap-8">
+	  <h1 className="text-2xl font-semibold"></h1>
+	
+		<div className="flex flex-col gap-2">
+		  <label className="text-sm text-gray-700">Username</label>
+		  <input
+			type="text"
+			name="name"
+			placeholder="john"
+			className="ring-2 ring-gray-300 rounded-md p-4"
+			onChange={(e) => changeHandler(e)}
+		  />
+		</div>
+	
+	  
+		<div className="flex flex-col gap-2">
+		  <label className="text-sm text-gray-700">E-mail</label>
+		  <input
+			type="email"
+			name="email"
+			placeholder="john@gmail.com"
+			className="ring-2 ring-gray-300 rounded-md p-4"
+			onChange={(e) => changeHandler(e)}
+		  />
+		</div>
+	  
+	  
+		<div className="flex flex-col gap-2">
+		  <label className="text-sm text-gray-700">Password</label>
+		  <input
+			type="password"
+			name="password"
+			placeholder="Enter your password"
+			className="ring-2 ring-gray-300 rounded-md p-4"
+			onChange={(e) => changeHandler(e)}
+		  />
+		</div>
+	
+	
 
-		<main>
-			<h1>LOG IN</h1>
-			<div>
-				<label htmlFor="">Gender</label>
-				<select 
-				name="gender" 
-				value={gender} 
-				onChange={handleChange}>
-					<option value="">Select Gender</option>
-					<option value="male">Male</option>
-					<option value="female">Female</option>
-				</select>
-			</div>
-			<div>
-				<label htmlFor="">Date</label>
-				<input type="date" name="date" id="" />
-			</div>
-
-			<div>
-				<p>Already Signed In</p>
-				<button>
-					<FcGoogle/><span>Sign in with google</span>
-				</button>
-			</div>
-		</main>
-
+	 
+	  
+	 <button >LOG IN</button>
+	
+	</form>
 	</div>
   )
 }
